@@ -1,0 +1,27 @@
+services:
+  # web:
+  #   container_name: mahia-be
+  #   build: .
+  #   image: mahia:v2
+  #   command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     - db
+
+  db:
+    image: postgres:latest
+    container_name: gormahia-backend
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gorbackend
+    ports:
+      - "5455:5432"
+    volumes:
+      - pg_gor:/var/lib/postgresql/data
+
+volumes:
+  pg_gor:

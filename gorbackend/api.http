@@ -1,0 +1,93 @@
+POST http://localhost:7000/account/register/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "user",
+    "email": "user@user.com",
+    "password": "user"
+}
+###
+GET http://localhost:7000/account/me/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY1Nzk0MDIzLCJpYXQiOjE3NjU3OTM3MjMsImp0aSI6IjJmMjA0Mjg4ZjBlZDQxNTM5M2Q4YjRmNTJhZWIyMmMzIiwidXNlcl9pZCI6IjYiLCJyb2xlIjoiZmFuIn0.3GLQzs12k2BVfnwTCYk-SUuBWubQqAhzENq87e1H4U8
+
+###
+POST http://localhost:7000/account/login/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "user10@user.com",
+    "password": "user10"
+}
+
+###
+GET  http://localhost:7000/tickets/purchased/ HTTP/1.1
+Content-Type: application/json
+###
+PATCH  http://localhost:7000/tickets/purchased/748f6c7b-faa6-4280-9891-936cf75a2442/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "status":"used"
+}
+###
+POST  http://localhost:7000/tickets/purchased/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "template":"2",
+    "quantity":"3",
+    "buyer":"me@me.me"
+   
+}
+
+###
+POST http://localhost:7000/player/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "first_name": "Kevin",
+    "last_name": "Kinyanjui",
+    "position": "forward",
+    "number": 9,
+    "team": "Gor Mahia",
+    "bio": "A talented forward known for his speed and agility.",
+    "nationality": "Kenyan",
+    "dob": "1995-05-15",
+    "height": 180,
+    "weight": 75
+    
+
+
+}
+###
+GET http://localhost:7000/news/ HTTP/1.1
+
+{
+    "title":"Good Morning",
+    "content":"Hello there",
+    "author":"Mr. west"
+    }
+###
+POST  http://localhost:7000/news/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDk3NzkyLCJpYXQiOjE3NjY0OTc0OTIsImp0aSI6IjdlNjY0MjEzY2RlNDQ3YzVhODAxYmE3ZjUyOGQ3NjAwIiwidXNlcl9pZCI6IjIwIiwicm9sZSI6ImZhbiJ9.eAw2IjNnH9QSPw8HFH2mTrRPPqBeoy6I-4I9DzeBVV8
+Cookie:  access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY2NDk3NzkyLCJpYXQiOjE3NjY0OTc0OTIsImp0aSI6IjdlNjY0MjEzY2RlNDQ3YzVhODAxYmE3ZjUyOGQ3NjAwIiwidXNlcl9pZCI6IjIwIiwicm9sZSI6ImZhbiJ9.eAw2IjNnH9QSPw8HFH2mTrRPPqBeoy6I-4I9DzeBVV8; expires=Tue, 23 Dec 2025 14:44:52 GMT; HttpOnly; Max-Age=3600; Path=/; SameSite=Lax,refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc2NjU4Mzg5MiwiaWF0IjoxNzY2NDk3NDkyLCJqdGkiOiJmYmJlOThmMmEwN2U0NjFiYjhmN2E2NWJlNGVhMzYxOSIsInVzZXJfaWQiOiIyMCIsInJvbGUiOiJmYW4ifQ.qhvvWD8z-GTxJpQIu23Ju6d1Po4YhGWkGNyZXh0VcWA; expires=Tue, 23 Dec 2025 14:44:52 GMT; HttpOnly; Max-Age=3600; Path=/; SameSite=Lax
+
+    {
+    "title":" Morning",
+    "content":"there and here",
+    "author":"Mr."
+    }
+
+###
+GET  http://localhost:7000/shop/order/ HTTP/1.1
+Content-Type: application/json
+
+###
+GET  http://localhost:7000/shop/1/ HTTP/1.1
+Content-Type: application/json
+
+    {
+    "user":"user10@user.com",
+    "quantity":2
+    }

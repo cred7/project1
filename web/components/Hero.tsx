@@ -1,0 +1,45 @@
+import { fetchWithCredentials } from "@/lib/utils/api";
+import Links from "./frontends/Link";
+
+export type Ticket = {
+  id: number;
+  name: string;
+  venue: string;
+  date: string;
+  capacity: number;
+  slug: string;
+  team_b: string;
+  team_a: string;
+}[];
+
+export default async function Hero() {
+  let tickets: Ticket = [];
+  let error: string | null = null;
+
+  try {
+    const ticket = await fetchWithCredentials(
+      "http://localhost:7000/tickets/events/",
+      {
+        cache: "no-store", // force fresh fetch every request
+      }
+    );
+
+    tickets = ticket;
+    console.log(tickets);
+  } catch (err) {
+    console.error("Ticket FETCH FAILED:", err);
+    error = "ERRORRRRRRRR";
+  }
+
+  return (
+    <div className="py-2">
+      <div className="max-w-mlg md:max-w-6xl mx-auto">
+        <div className="w-full  flex flex-col">
+          <div className="w-full p-1">
+            {!error ? <Links tickets={tickets} /> : "ERROR"}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
