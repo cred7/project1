@@ -40,6 +40,7 @@ class EventViewSet(viewsets.ModelViewSet):
 class TicketTemplateViewSet(viewsets.ModelViewSet): 
     queryset = Event.objects.all()
     serializer_class = ttickets
+    lookup_field = 'slug'
     permission_classes = [AllowAny]  
 
 

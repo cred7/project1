@@ -1,6 +1,7 @@
 "use client";
 import { Player } from "@/lib/types";
-import { useParams } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { redirect, useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const SinglePlayerPage: React.FC = () => {
@@ -28,16 +29,25 @@ const SinglePlayerPage: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto p-6">
       {/* Hero section */}
-      <div className="flex p-2 border flex-col md:flex-row gap-3 overflow-hidden">
-        <div className="md:w-2/3 h-30 border">
+      <button
+        onClick={() => {
+          redirect("/player");
+        }}
+        className="flex items-center"
+      >
+        <ArrowLeft size={20} />
+        Back
+      </button>
+      <div className="flex items-center p-2 border sm:h-[70vh] flex-col sm:flex-row gap-3 overflow-hidden p-auto justify-center">
+        <div className="items-center sm:w-2/4 h-100 w-full sm:h-full border">
           <img
             src={player.thumbnails || "/placeholder.jpg"}
             alt={`${player.first_name} ${player.last_name}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
 
-        <div className="md:w-1/3 p-6">
+        <div className="max-md:text-sm md:w-1/4 p-6">
           <h1 className="text-4xl font-bold text-green-700 mb-2">
             {player.first_name} {player.last_name}
           </h1>

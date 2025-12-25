@@ -16,7 +16,7 @@ const Links = ({ tickets }: { tickets: Ticket }) => {
   return (
     <div className="flex gap2">
       {tickets.map((p) => (
-        <Link key={p.id} href={`/${p.id}`} className="flex-1">
+        <Link key={p.id} href={`/${p.slug}`} className="flex-1">
           <div className="p-2 flex border-l hover:bg-slate-50 min-w-50 flex-col">
             <h1 className="bg-slate-50 w-full rounded flex justify-between px-1">
               {p.date.split("T")[0]}
@@ -27,7 +27,7 @@ const Links = ({ tickets }: { tickets: Ticket }) => {
             </p>
 
             <p className="text-xs font-bold">{p.name}</p>
-            <p>{p.venue}</p>
+            <p>{p.venue} slugg</p>
           </div>
         </Link>
       ))}
