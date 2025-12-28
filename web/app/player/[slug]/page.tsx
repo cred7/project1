@@ -1,43 +1,34 @@
-"use client";
+// "use client";
 import { Player } from "@/lib/types";
 import { ArrowLeft } from "lucide-react";
-import { redirect, useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import React from "react";
 
-const SinglePlayerPage: React.FC = () => {
-  const params = useParams();
-  const { slug } = params;
-  const [player, setPlayer] = useState<Player | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
 
-  useEffect(() => {
-    fetch(`http://localhost:7000/player/${slug}/`) // your API endpoint
-      .then((res) => res.json())
-      .then((data: Player) => {
-        setPlayer(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [slug]);
+const SinglePlayerPage: React.FC<PageProps> = async ({ params }) => {
+  const { slug } = await params;
+  console.log(slug);
 
-  if (loading) return <p className="text-center mt-10">Loading player...</p>;
+  const player: Player = await fetch(`http://localhost:7000/player/${slug}/`) // your API endpoint
+    .then((res) => res.json())
+
+    .catch((err) => {
+      console.error(err);
+      return null;
+    });
+
   if (!player) return <p className="text-center mt-10">Player not found.</p>;
 
   return (
     <div className="max-w-5xl mx-auto p-6">
       {/* Hero section */}
-      <button
-        onClick={() => {
-          redirect("/player");
-        }}
-        className="flex items-center"
-      >
+      <Link href={"/player"} className="flex items-center">
         <ArrowLeft size={20} />
         Back
-      </button>
+      </Link>
       <div className="flex items-center p-2 border sm:h-[70vh] flex-col sm:flex-row gap-3 overflow-hidden p-auto justify-center">
         <div className="items-center sm:w-2/4 h-100 w-full sm:h-full border">
           <img

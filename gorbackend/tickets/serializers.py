@@ -16,6 +16,7 @@ class PurchasedTicketSerializer(serializers.ModelSerializer):
     template_name = serializers.CharField(source="template.name", read_only=True)
     event_name = serializers.CharField(source="template.event.name", read_only=True)
     # code = serializers.UUIDField(required=False, write_only=True)
+    phone_number = serializers.CharField(write_only = True)
     quantity = serializers.IntegerField(required = False, write_only =True)
     class Meta:
         model = PurchasedTicket
@@ -27,7 +28,7 @@ class PurchasedTicketSerializer(serializers.ModelSerializer):
             "buyer",
             "ticket_code",
             "purchased_at",
-            # "code",
+            "phone_number",
             "status",
             "quantity"
             

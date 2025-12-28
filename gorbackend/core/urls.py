@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('silk/', include('silk.urls', namespace='silk')),
     path('account/', include('account.urls')),
     path('news/', include('news.urls')),    
     path('shop/', include('shop.urls')),
@@ -34,3 +35,4 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
+# urlpatterns += path('', include())

@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import PlayerList from "@/components/Players";
 import React from "react";
 

@@ -3,8 +3,9 @@ import { Ticket } from "@/lib/types";
 import { fetchWithCredentials } from "@/lib/utils/api";
 
 async function getPlayer(id: string): Promise<Ticket> {
+  let ids = id || "1";
   const res = await fetchWithCredentials(
-    `http://localhost:7000/tickets/getticket/${id}/`,
+    `http://localhost:7000/tickets/getticket/${ids}/`,
     { cache: "no-store" }
   );
   console.log(res);

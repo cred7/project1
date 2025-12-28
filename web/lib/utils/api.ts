@@ -2,20 +2,25 @@ export const fetchWithCredentials = async (
   url: string,
   options: RequestInit = {}
 ) => {
-  const response = await fetch(url, {
-    ...options,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-  });
+  try {
+    const response = await fetch(url, {
+      ...options,
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (!response.ok) {
-    throw { status: response.status, data };
+    if (!response.ok) {
+      console.log("halloo");
+      throw { status: response.status, data };
+    }
+
+    return data;
+  } catch (e) {
+    console.log("hallo", e);
   }
-
-  return data;
 };

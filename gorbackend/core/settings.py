@@ -45,9 +45,11 @@ INSTALLED_APPS = [
     'news',
     'player',
     'shop',
+    'silk'
 ]
 
 MIDDLEWARE = [
+    'silk.middleware.SilkyMiddleware',
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

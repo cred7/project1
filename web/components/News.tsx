@@ -1,8 +1,5 @@
-"use client";
-
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 type NewsItem = {
   id: string;
@@ -15,85 +12,171 @@ type NewsItem = {
   slug: string;
 };
 
-export default function HomeNews() {
-  const [news, setNews] = useState<NewsItem[]>([]);
-  const [error, setError] = useState<null | string>(null);
+export default async function HomeNews() {
+  const fetchNews: NewsItem[] = await fetch("http://localhost:7000/news/", {
+    cache: "no-store",
+  })
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error(err);
+      return null;
+    });
+  const [headline, ...rest] = fetchNews;
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const res = await fetch("http://localhost:7000/news/", {
-          cache: "no-store",
-        });
-        if (!res.ok) throw new Error("Failed to fetch news");
-        const data: NewsItem[] = await res.json();
-        setNews(data);
-      } catch (err) {
-        console.error(err);
-        setError("Connection error, please try again later");
-      }
-    };
-    fetchNews();
-  }, []);
-
-  if (!news.length) return null;
-
-  const [headline, ...rest] = news;
-
-  return error ? (
-    <>
-      <div className="text-5xl">{error}</div>
-    </>
+  return !fetchNews ? (
+    <div className="text-center py-12">
+      <div className="text-2xl text-gray-500 mb-2">Unable to load news</div>
+      <p className="text-gray-400">Please try again later</p>
+    </div>
   ) : (
-    <section className="max-w-7xl mx-auto px-4 py-10 space-y-6">
+    <section className="max-w-7xl mx-auto px-4 py-10 space-y-6 mb-3">
       {/* Section header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Latest News</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Latest News</h2>
         <Link
           href="/news"
-          className="text-sm text-muted-foreground hover:underline"
+          className="text-sm text-green-600 hover:text-green-700 font-medium transition-colors flex items-center group"
         >
-          View all
+          View all news
+          <svg
+            className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
         </Link>
       </div>
-      <div className="flex flex-col md:grid md:grid-cols-4 items-center gap-2 px-2">
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-6 md:h-[80vh]">
         {/* Main headline */}
-        <Link className="w-full md:col-span-3" href={`/news/${headline.slug}`}>
-          <Card className="overflow-hidden gap-1 py-0">
-            <div className="h-70">
+        <Link className="lg:col-span-2 h group" href={`/news/${headline.slug}`}>
+          <Card className="overflow-hidden border-0 m-0 p-0 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+            <div className="relative h-full overflow-hidden">
               <img
                 src={headline.thumbnail}
                 alt={headline.title}
-                className="h-full w-full  rounded-2xl object-cover"
+                className="h-full w-full object-cover group-hover:scale-102 transition-transform duration-300"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="inline-block px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded-full mb-3">
+                  FEATURED
+                </div>
+                <CardTitle className="text-2xl md:text-3xl leading-tight text-white mb-2 group-hover:text-green-100 transition-colors">
+                  {headline.title}
+                </CardTitle>
+                <p className="text-gray-200 text-sm line-clamp-2">
+                  {headline.content}
+                </p>
+              </div>
             </div>
-            <CardContent className="p-4 pt-0">
-              <CardTitle className="text-2xl leading-tight">
-                {headline.title}
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                {headline.content}
-              </p>
-            </CardContent>
           </Card>
         </Link>
 
-        {/* Secondary headlines */}
-        <div className="mt-4 md:col-span-1 md:flex md:flex-col grid sm:grid-col w-full gap-4">
+        {/* Secondary headlines - Horizontal strip on mobile, vertical column on desktop */}
+        <div className="lg:col-span-1 h-full w-full lg:flex lg:flex-col border">
+          {/* Mobile: Horizontal scrollable strip */}
+          {/* <div className="flex-col w-full h-full flex"> */}
           {rest.slice(0, 3).map((item) => (
-            <Link key={item.id} href={`/news/${item.slug}`}>
-              <Card className="hover:bg-muted/50 transition">
-                <CardContent className="p-4">
-                  <p className="text-xs text-muted-foreground mb-1">
-                    {new Date(item.created_at).toLocaleDateString()}
-                  </p>
-                  <CardTitle className="text-sm leading-snug line-clamp-2">
+            <Link
+              key={item.id}
+              href={`/news/${item.slug}`}
+              className=" w-full h-full lg:flex-1 group"
+            >
+              <Card className="overflow-hidden lg:w-full lg:h-full border border-gray-200 hover:border-green-300 hover:shadow-md transition-all duration-200 group-hover:-translate-y-0.5">
+                <div className="relative h-full overflow-hidden">
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="h-full w-full object-cover group-hover:scale-102 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                </div>
+                <CardContent className="px-1">
+                  <div className="flex items-center justify-between mb-0">
+                    <span className="text-xs text-gray-500 font-medium">
+                      {new Date(item.created_at).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                    <svg
+                      className="w-3 h-3 text-green-600 group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
+                  <CardTitle className="text-xs leading-snug text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">
                     {item.title}
                   </CardTitle>
                 </CardContent>
               </Card>
             </Link>
           ))}
+          {/* </div> */}
+
+          {/* Desktop: Vertical column */}
+          {/* <div className="hidden lg:flex lg:flex-col lg:space-y-4">
+            {rest.slice(0, 3).map((item) => (
+              <Link
+                key={item.id}
+                href={`/news/${item.slug}`}
+                className="block group"
+              >
+                <Card className="overflow-hidden border border-gray-200 hover:border-green-300 hover:shadow-md transition-all duration-200 group-hover:-translate-y-0.5">
+                  <div className="relative h-32 overflow-hidden">
+                    <img
+                      src={item.thumbnail}
+                      alt={item.title}
+                      className="h-full w-full object-cover group-hover:scale-102 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs text-gray-500 font-medium">
+                        {new Date(item.created_at).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                      <svg
+                        className="w-4 h-4 text-green-600 group-hover:translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                    <CardTitle className="text-sm leading-snug text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">
+                      {item.title}
+                    </CardTitle>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div> */}
         </div>
       </div>
     </section>

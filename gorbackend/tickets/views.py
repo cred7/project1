@@ -2,7 +2,8 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
-
+from django.utils.decorators import method_decorator
+from silk.profiling.profiler import silk_profile
 from .models import Event, TicketTemplate, PurchasedTicket
 from .serializers import (
     EventSerializer,
@@ -14,6 +15,7 @@ from .serializers import (
 import requests
 
 # Simple home endpoint for updating the event and its ticket types by admin 
+# @method_decorator(silk_profile(name="Home"), name="dispatch")
 class Home(viewsets.ModelViewSet):
     queryset = TicketTemplate.objects.all()
     permission_classes = [AllowAny]
@@ -30,6 +32,7 @@ class Home(viewsets.ModelViewSet):
         return super().get_queryset()
 
 # Event endpoints
+# @method_decorator(silk_profile(name="EventViewSet"), name="dispatch")
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -37,14 +40,20 @@ class EventViewSet(viewsets.ModelViewSet):
 
 
 # TicketTemplate for creating ticket templates endpoints (ticket tiers)
+# @method_decorator(silk_profile(name="TicketTemplateViewSet"), name="dispatch")
 class TicketTemplateViewSet(viewsets.ModelViewSet): 
-    queryset = Event.objects.all()
+    queryset = Event.objects.prefetch_related('ticket_types').order_by('-date')
     serializer_class = ttickets
     lookup_field = 'slug'
     permission_classes = [AllowAny]  
 
+    @silk_profile(name="TicketTemplateViewSet.dispatch")
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 
 # PurchasedTicket endpoints (buying, confirming, scanning)
+# @method_decorator(silk_profile(name="PurchasedTicketViewSet"), name="dispatch")
 class PurchasedTicketViewSet(viewsets.ModelViewSet):
     queryset = PurchasedTicket.objects.all()
     serializer_class = PurchasedTicketSerializer

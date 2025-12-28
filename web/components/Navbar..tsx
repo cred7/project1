@@ -3,11 +3,11 @@ import Buttons from "./Buttons";
 
 const Navbar = () => {
   const home = [
-    { name: "home", href: "#home" },
-    { name: "Shop", href: "#home" },
-    { name: "About", href: "#home" },
+    { name: "home", href: "/" },
+    { name: "Shop", href: "/shop" },
+    { name: "About", href: "/" },
     { name: "News", href: "/news" },
-    { name: "Tickets", href: "#home" },
+    { name: "Tickets", href: "/" },
   ];
 
   return (
