@@ -1,9 +1,10 @@
 import NewsCard from "@/components/news/NewsCard";
 import NewsHero from "@/components/news/NewsHero";
 import { NewsItem } from "@/lib/types";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function getNews(): Promise<NewsItem[]> {
-  const res = await fetch("http://localhost:7000/news/", {
+  const res = await fetch(`${BASE_URL}/news/`, {
     cache: "no-store",
   });
 

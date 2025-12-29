@@ -12,20 +12,19 @@ export type Ticket = {
   team_a: string;
 }[];
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default async function Hero() {
   let tickets: Ticket = [];
   let error: string | null = null;
 
   try {
-    const ticket = await fetchWithCredentials(
-      "http://localhost:7000/tickets/events/",
-      {
-        cache: "no-store", // force fresh fetch every request
-      }
-    );
+    const ticket = await fetchWithCredentials(`${BASE_URL}/tickets/events/`, {
+      cache: "no-store", // force fresh fetch every request
+    });
 
     tickets = ticket;
-    console.log(tickets);
+    console.log("i am hooooome");
   } catch (err) {
     console.error("Ticket FETCH FAILED:", err);
     error = "ERRORRRRRRRR";

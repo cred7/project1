@@ -4,6 +4,7 @@ import { fetchWithCredentials } from "@/lib/utils/api";
 import { useEffect } from "react";
 
 export const AuthHydrators = () => {
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   const login = useAuthStore((state) => state.login);
   const logout = useAuthStore((state) => state.logout);
   const stopLoading = useAuthStore((state) => state.stopLoading);
@@ -11,9 +12,7 @@ export const AuthHydrators = () => {
   useEffect(() => {
     const hydrateAuth = async () => {
       try {
-        const res = await fetchWithCredentials(
-          "http://localhost:7000/account/me/"
-        );
+        const res = await fetchWithCredentials(`${BASE_URL}/account/me/`);
         login(res);
       } catch {
         // network error → do NOT auto logout

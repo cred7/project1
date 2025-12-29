@@ -4,6 +4,8 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
@@ -12,7 +14,7 @@ const SinglePlayerPage: React.FC<PageProps> = async ({ params }) => {
   const { slug } = await params;
   console.log(slug);
 
-  const player: Player = await fetch(`http://localhost:7000/player/${slug}/`) // your API endpoint
+  const player: Player = await fetch(`${BASE_URL}/player/${slug}/`) // your API endpoint
     .then((res) => res.json())
 
     .catch((err) => {

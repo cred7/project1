@@ -12,15 +12,29 @@ type NewsItem = {
   slug: string;
 };
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default async function HomeNews() {
-  const fetchNews: NewsItem[] = await fetch("http://localhost:7000/news/", {
-    cache: "no-store",
-  })
-    .then((res) => res.json())
-    .catch((err) => {
-      console.error(err);
+  let fetchNews: NewsItem[] | null = null;
+
+  try {
+    const res = await fetch(`${BASE_URL}/news/`, { cache: "no-store" });
+
+    if (!res.ok) {
+      console.error("HTTP error:", res.status);
       return null;
-    });
+    }
+
+    fetchNews = await res.json();
+  } catch (err) {
+    console.error("Fetch failed:", err);
+    return null;
+  }
+
+  if (!fetchNews || fetchNews.length === 0) {
+    return null; // handle empty array or failed fetch
+  }
+
   const [headline, ...rest] = fetchNews;
 
   return !fetchNews ? (

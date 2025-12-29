@@ -3,17 +3,18 @@ import Link from "next/link";
 import React from "react";
 
 const PlayerList: React.FC = async () => {
-  const players: Player[] = await fetch("http://localhost:7000/player/")
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+  const player: Promise<Player[]> = fetch(`${BASE_URL}/player/`)
     .then((res) => res.json())
     .catch((err) => {
       console.error(err);
       return null;
     });
-
+  const players = await player;
   return (
     <section className="max-w-6xl m-auto p-4">
       <div className="p-2 grid grid-cols-3 gap-1">
-        {players.slice(0, 3).map((player) => (
+        {players?.slice(0, 3).map((player) => (
           <Link
             key={player.id}
             href={`/player/${player.slug}`}

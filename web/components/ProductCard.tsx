@@ -13,23 +13,21 @@ const ProductCard: React.FC<Props> = ({ product }) => {
   const [error, setError] = useState<string | null>(null);
 
   const handlePurchase = async () => {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(
-        `http://localhost:7000/shop/${product.id}/purchase/`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user: "user@user.com", // replace with logged-in user's email
-            quantity,
-          }),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/shop/${product.id}/purchase/`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: "user@user.com", // replace with logged-in user's email
+          quantity,
+        }),
+      });
 
       if (!response.ok) {
         const err = await response.json();

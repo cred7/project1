@@ -11,9 +11,9 @@ const ShopPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("name");
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
-
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
-    fetch("http://localhost:7000/shop/")
+    fetch(`${BASE_URL}/shop`)
       .then((res) => res.json())
       .then((data: Product[]) => {
         setProducts(data);

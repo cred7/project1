@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-vto(d5y-p*90v$7$08#h_5zn8%e0efp^@#$sxi4#2tf2%dz*-!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend"]
 
 
 # Application definition
@@ -89,8 +89,10 @@ DATABASES = {
         'NAME': 'gorbackend',
         'USER': 'postgres',
         'PASSWORD': 'password', 
-        'HOST': 'localhost',
-        'PORT': '5455',
+        # 'HOST': 'localhost',
+        # 'PORT': '5455',
+        'HOST': 'postgres',
+        'PORT': '5432',
         
     }
 }
@@ -115,7 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:4000",
+    "http://frontend:4000",
+    "http://backend:7000"
 ]
 CORS_ALLOW_HEADERS = [
     "authorization",

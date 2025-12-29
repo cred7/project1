@@ -31,6 +31,7 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
   const [phone, setPhone] = useState<string>("");
   const [buyer, setbuyer] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +42,7 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:7000/tickets/purchased/", {
+      const res = await fetch(`${BASE_URL}/tickets/purchased/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

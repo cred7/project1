@@ -29,6 +29,8 @@ const hh: types = {
   weight: 0,
 };
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const Create = () => {
   const [e, sete] = useState(null);
   const [c, setC] = useState(false);
@@ -37,7 +39,7 @@ const Create = () => {
   const Creates = async () => {
     console.log(item);
     try {
-      const d = await fetchWithCredentials(`http://localhost:7000/player/`, {
+      const d = await fetchWithCredentials(`${BASE_URL}/player/`, {
         method: "POST",
         credentials: "include",
       });

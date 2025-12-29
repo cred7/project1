@@ -1,12 +1,12 @@
 import { NewsItem } from "@/lib/types";
-
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 export default async function ArticlePage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article: NewsItem = await fetch(`http://localhost:7000/news/${slug}/`, {
+  const article: NewsItem = await fetch(`${BASE_URL}/news/${slug}/`, {
     cache: "no-store",
   })
     .then((res) => res.json())

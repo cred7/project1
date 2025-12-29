@@ -5,6 +5,7 @@ import { useAuthStore } from "@/lib/hooks/useAuthStore";
 import { fetchWithCredentials } from "@/lib/utils/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,14 +19,12 @@ export default function LoginPage() {
     setError("");
 
     try {
-      await fetchWithCredentials("http://localhost:7000/account/login/", {
+      await fetchWithCredentials(`${BASE_URL}/account/login/`, {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
 
-      const user = await fetchWithCredentials(
-        "http://localhost:7000/account/me/"
-      );
+      const user = await fetchWithCredentials(`${BASE_URL}/account/me/`);
 
       login(user);
       router.push("/");
@@ -40,28 +39,22 @@ export default function LoginPage() {
     try {
       console.log(name, email, password);
       // Step 1: send credentials to backend
-      const hi = await fetchWithCredentials(
-        "http://localhost:7000/account/register/",
-        {
-          method: "POST",
-          body: JSON.stringify({ email, password, name, role: "fan" }),
-        }
-      );
+      const hi = await fetchWithCredentials(`${BASE_URL}/account/register/`, {
+        method: "POST",
+        body: JSON.stringify({ email, password, name, role: "fan" }),
+      });
 
       console.log("Signed up response:", await hi);
       // Step 1: send credentials to backend
-      const h = await fetchWithCredentials(
-        "http://localhost:7000/account/login/",
-        {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      const h = await fetchWithCredentials(`${BASE_URL}/account/login/`, {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
       console.log("Login response:", h);
 
       //   Step 2: fetch user identity from /me
       const user = await fetchWithCredentials(
-        "http://localhost:7000/account/me/"
+        `${BASE_URL}/account/me/`
 
         // { headers: { Authorization: `Bearer ${t.access}` } }
       );

@@ -2,10 +2,12 @@ import TicketPurchaseForm from "@/components/frontends/TicketPurchase";
 import { Ticket } from "@/lib/types";
 import { fetchWithCredentials } from "@/lib/utils/api";
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 async function getPlayer(id: string): Promise<Ticket> {
   let ids = id || "1";
   const res = await fetchWithCredentials(
-    `http://localhost:7000/tickets/getticket/${ids}/`,
+    `${BASE_URL}/tickets/getticket/${ids}/`,
     { cache: "no-store" }
   );
   console.log(res);

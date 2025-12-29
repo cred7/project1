@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: ./gorbackend
+    container_name: django-backend
+    volumes:
+      - ./gorbackend:/app
+    ports:
+      - "7000:7000"
+    depends_on:
+      - postgres
+    command: >
+      sh -c "python manage.py migrate &&
+            python manage.py runserver 0.0.0.0:7000"
+
+  frontend:
+    build:
+      context: ./web
+    container_name: nextjs-frontend
+
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    ports:
+      - "4000:4000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:7000
+      PORT: 4000
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres
+    container_name: gormahia-backend
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: gorbackend
+    ports:
+      - "5455:5432"
+    volumes:
+      - pg_gor:/var/lib/postgresql/data
+
+volumes:
+  pg_gor:
+    external: true
+    name: gorbackend_pg_gor
