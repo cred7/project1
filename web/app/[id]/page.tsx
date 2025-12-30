@@ -2,7 +2,7 @@ import TicketPurchaseForm from "@/components/frontends/TicketPurchase";
 import { Ticket } from "@/lib/types";
 import { fetchWithCredentials } from "@/lib/utils/api";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.API_URL;
 
 async function getPlayer(id: string): Promise<Ticket> {
   let ids = id || "1";

@@ -1,4 +1,4 @@
-import { fetchWithCredentials } from "@/lib/utils/api";
+import { ApiError, fetchWithCredentials } from "@/lib/utils/api";
 import Links from "./frontends/Link";
 
 export type Ticket = {
@@ -12,7 +12,7 @@ export type Ticket = {
   team_a: string;
 }[];
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.API_URL;
 
 export default async function Hero() {
   let tickets: Ticket = [];
@@ -25,9 +25,15 @@ export default async function Hero() {
 
     tickets = ticket;
     console.log("i am hooooome");
-  } catch (err) {
-    console.error("Ticket FETCH FAILED:", err);
-    error = "ERRORRRRRRRR";
+  } catch (error: any) {
+    if (error instanceof ApiError) {
+      console.error("Failed to load :", error.message);
+      return (
+        <p className="text-center py-20">
+          {error.message} Please try again later.
+        </p>
+      );
+    }
   }
 
   return (
@@ -35,7 +41,7 @@ export default async function Hero() {
       <div className="max-w-mlg md:max-w-6xl mx-auto">
         <div className="w-full  flex flex-col">
           <div className="w-full p-1">
-            {!error ? <Links tickets={tickets} /> : "ERROR"}
+            {!error ? <Links tickets={tickets} /> : "klklk"}
           </div>
         </div>
       </div>

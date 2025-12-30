@@ -146,7 +146,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler'
+    'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
+
+    'DEFAULT_THROTTLE_CLASSES' : ['rest_framework.throttling.AnonRateThrottle',
+                                  'rest_framework.throttling.UserRateThrottle'
+                                  ],
+    'DEFAULT_THROTTLE_RATES': {
+                                'anon':'10/minute',
+                                'user':'5/minute',
+                                                    }
 }
 
 
@@ -161,3 +169,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
+
+CACHES = {
+    'default': {    
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+        'OPTIONS': {
+            "CLIENT_CLASS": 'django_redis.client.DefaultClient',    
+        }
+    }
+  }

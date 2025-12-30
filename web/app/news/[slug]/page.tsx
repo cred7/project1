@@ -1,5 +1,5 @@
 import { NewsItem } from "@/lib/types";
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.API_URL;
 export default async function ArticlePage({
   params,
 }: {

@@ -20,13 +20,18 @@ const ShopPage: React.FC = () => {
         setFilteredProducts(data);
         setLoading(false);
       })
-      .catch(() => {
-        setError("Failed to load products");
+      .catch((e: Error) => {
+        setError(`Failed to load products: ${e.message}`);
         setLoading(false);
+        setFilteredProducts([]);
       });
   }, []);
 
   useEffect(() => {
+    if (!Array.isArray(products)) {
+      setFilteredProducts([]);
+      return;
+    }
     let filtered = products.filter(
       (product) =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -213,7 +218,13 @@ const ShopPage: React.FC = () => {
         </div>
 
         {/* Products Grid */}
-        {filteredProducts.length === 0 ? (
+        {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
               <svg
@@ -231,7 +242,7 @@ const ShopPage: React.FC = () => {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              No products found
+              No products found {error}
             </h3>
             <p className="text-gray-600 mb-4">
               Try adjusting your search or filters
@@ -246,12 +257,6 @@ const ShopPage: React.FC = () => {
             >
               Clear Filters
             </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
           </div>
         )}
       </div>

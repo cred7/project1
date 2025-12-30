@@ -1,3 +1,16 @@
+export class ApiError extends Error {
+  status: number;
+  code?: string;
+  payload?: any;
+
+  constructor(message: string, status: number, payload?: any, code?: string) {
+    super(message);
+    this.status = status;
+    this.payload = payload;
+    this.code = code;
+  }
+}
+
 export const fetchWithCredentials = async (
   url: string,
   options: RequestInit = {}
@@ -12,15 +25,25 @@ export const fetchWithCredentials = async (
       },
     });
 
-    const data = await response.json();
+    let data: any = null;
+    try {
+      data = await response.json();
+    } catch {
+      data = { message: "Invalid response format" };
+    }
 
     if (!response.ok) {
-      console.log("halloo");
-      throw { status: response.status, data };
+      // Backend may provide code + message
+      const message = data?.message || response.statusText || "Unknown error";
+      const code = data?.code;
+      throw new ApiError(message, response.status, data, code);
     }
 
     return data;
-  } catch (e) {
-    console.log("hallo", e);
+  } catch (err: any) {
+    if (err instanceof ApiError) throw err;
+
+    // Network errors, CORS, timeouts
+    throw new ApiError(err.message || "Network error", 0);
   }
 };

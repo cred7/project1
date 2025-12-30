@@ -1,4 +1,5 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { ApiError, fetchWithCredentials } from "@/lib/utils/api";
 import Link from "next/link";
 
 type NewsItem = {
@@ -12,23 +13,22 @@ type NewsItem = {
   slug: string;
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = process.env.API_URL;
 
 export default async function HomeNews() {
   let fetchNews: NewsItem[] | null = null;
 
   try {
-    const res = await fetch(`${BASE_URL}/news/`, { cache: "no-store" });
-
-    if (!res.ok) {
-      console.error("HTTP error:", res.status);
-      return null;
+    fetchNews = await fetchWithCredentials(`${BASE_URL}/news/`);
+  } catch (error: any) {
+    if (error instanceof ApiError) {
+      console.error("Failed to fetch news:", error.message);
+      return (
+        <p className="text-center py-20">
+          Unable to load news. Please try again later.{error.message}
+        </p>
+      );
     }
-
-    fetchNews = await res.json();
-  } catch (err) {
-    console.error("Fetch failed:", err);
-    return null;
   }
 
   if (!fetchNews || fetchNews.length === 0) {

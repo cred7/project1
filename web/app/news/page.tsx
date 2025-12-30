@@ -1,20 +1,31 @@
 import NewsCard from "@/components/news/NewsCard";
 import NewsHero from "@/components/news/NewsHero";
 import { NewsItem } from "@/lib/types";
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+import { ApiError, fetchWithCredentials } from "@/lib/utils/api";
+
+const BASE_URL = process.env.API_URL;
 
 async function getNews(): Promise<NewsItem[]> {
-  const res = await fetch(`${BASE_URL}/news/`, {
+  return await fetchWithCredentials(`${BASE_URL}/news/`, {
     cache: "no-store",
   });
-
-  if (!res.ok) throw new Error("Failed to fetch news");
-
-  return res.json();
 }
 
 export default async function NewsPage() {
-  const news = await getNews();
+  let news: NewsItem[] = [];
+
+  try {
+    news = await getNews();
+  } catch (error: any) {
+    if (error instanceof ApiError) {
+      console.error("Failed to fetch news:", error.message);
+      return (
+        <p className="text-center py-20">
+          Unable to load news. Please try again later.{error.message}
+        </p>
+      );
+    }
+  }
 
   if (!news.length) {
     return <p className="text-center py-20">No sports news available.</p>;
