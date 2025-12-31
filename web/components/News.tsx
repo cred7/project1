@@ -39,17 +39,17 @@ export default async function HomeNews() {
 
   return !fetchNews ? (
     <div className="text-center py-12">
-      <div className="text-2xl text-gray-500 mb-2">Unable to load news</div>
+      <div className="text-2xl text-gray-500 mb-2">Unable to load news </div>
       <p className="text-gray-400">Please try again later</p>
     </div>
   ) : (
-    <section className="max-w-7xl mx-auto px-4 py-10 space-y-6 mb-3">
+    <section className="max-w-8xl mx-auto px-1 py-3 space-y-6 mb-3 border">
       {/* Section header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">Latest News</h2>
+      <div className="flex items-center justify-end">
+        {/* <h2 className="text-2xl font-bold text-gray-900">Latest News</h2> */}
         <Link
           href="/news"
-          className="text-sm text-green-600 hover:text-green-700 font-medium transition-colors flex items-center group"
+          className="text-sm p-0 text-green-600 hover:text-green-700 font-medium transition-colors flex items-center group"
         >
           View all news
           <svg
@@ -68,10 +68,13 @@ export default async function HomeNews() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-6 md:h-[80vh]">
+      <div className="grid grid-cols-1 md:grid-cols-3 p-3 gap-y-6 gap-x-3 md:h-[50vh] lg:h-[90vh] bg-gradient-to-r from-green-700 to-green-600">
         {/* Main headline */}
-        <Link className="lg:col-span-2 h group" href={`/news/${headline.slug}`}>
-          <Card className="overflow-hidden border-0 m-0 p-0 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+        <Link
+          className="md:col-span-2 h-full items-center group"
+          href={`/news/${headline.slug}`}
+        >
+          <Card className="h-75 md:min-h-full rounded-none overflow-hidden border-0 m-0 p-0 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
             <div className="relative h-full overflow-hidden">
               <img
                 src={headline.thumbnail}
@@ -95,102 +98,57 @@ export default async function HomeNews() {
         </Link>
 
         {/* Secondary headlines - Horizontal strip on mobile, vertical column on desktop */}
-        <div className="lg:col-span-1 h-full w-full lg:flex lg:flex-col border">
+        <div className="md:col-span-1 md:h-full h-35 sm:h-45 w-full flex gap-1 md:flex-col border">
           {/* Mobile: Horizontal scrollable strip */}
           {/* <div className="flex-col w-full h-full flex"> */}
           {rest.slice(0, 3).map((item) => (
             <Link
               key={item.id}
               href={`/news/${item.slug}`}
-              className=" w-full h-full lg:flex-1 group"
+              className=" w-full h-full flex-1 group"
             >
-              <Card className="overflow-hidden lg:w-full lg:h-full border border-gray-200 hover:border-green-300 hover:shadow-md transition-all duration-200 group-hover:-translate-y-0.5">
+              <Card className="p-0 rounded-none overflow-hidden w-full h-full border border-gray-200 hover:border-green-300 hover:shadow-md transition-all duration-200 group-hover:-translate-y-0.5">
                 <div className="relative h-full overflow-hidden">
                   <img
                     src={item.thumbnail}
                     alt={item.title}
                     className="h-full w-full object-cover group-hover:scale-102 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                </div>
-                <CardContent className="px-1">
-                  <div className="flex items-center justify-between mb-0">
-                    <span className="text-xs text-gray-500 font-medium">
-                      {new Date(item.created_at).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                    <svg
-                      className="w-3 h-3 text-green-600 group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
+                  <div className="absolute top-[50%] inset-0 bg-gradient-to-t from-black/40 to-transparent">
+                    <CardContent className="px-1 ">
+                      <div className="flex items-center justify-between mb-0">
+                        <span className="text-xs text-gray-500 font-medium">
+                          {new Date(item.created_at).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                            }
+                          )}
+                        </span>
+                        <svg
+                          className="w-3 h-3 text-green-600 group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                      <CardTitle className="text-xs leading-snug text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">
+                        {item.title}
+                      </CardTitle>
+                    </CardContent>
                   </div>
-                  <CardTitle className="text-xs leading-snug text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">
-                    {item.title}
-                  </CardTitle>
-                </CardContent>
+                </div>
               </Card>
             </Link>
           ))}
-          {/* </div> */}
-
-          {/* Desktop: Vertical column */}
-          {/* <div className="hidden lg:flex lg:flex-col lg:space-y-4">
-            {rest.slice(0, 3).map((item) => (
-              <Link
-                key={item.id}
-                href={`/news/${item.slug}`}
-                className="block group"
-              >
-                <Card className="overflow-hidden border border-gray-200 hover:border-green-300 hover:shadow-md transition-all duration-200 group-hover:-translate-y-0.5">
-                  <div className="relative h-32 overflow-hidden">
-                    <img
-                      src={item.thumbnail}
-                      alt={item.title}
-                      className="h-full w-full object-cover group-hover:scale-102 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  </div>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs text-gray-500 font-medium">
-                        {new Date(item.created_at).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </span>
-                      <svg
-                        className="w-4 h-4 text-green-600 group-hover:translate-x-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </div>
-                    <CardTitle className="text-sm leading-snug text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">
-                      {item.title}
-                    </CardTitle>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div> */}
         </div>
       </div>
     </section>

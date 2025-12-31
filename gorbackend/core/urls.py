@@ -28,6 +28,8 @@ urlpatterns = [
     path('player/', include('player.urls')),
     path('matches/', include('matches.urls')),
     path('tickets/', include('tickets.urls')),
+    path("api/payments/", include("payement.urls")),
+
 ]
 
 if settings.DEBUG:

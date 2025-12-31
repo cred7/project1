@@ -69,36 +69,26 @@ class PurchasedTicketViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        tickets = serializer.save()  # LIST comes back here
-        
-        output_serializer = self.get_serializer(tickets, many=True)
+        # Extract phone number and quantity
+        phone_number = serializer.validated_data["phone_number"]
 
+        # Payment initiated — ticket creation can be deferred until callback confirms payment
         return Response(
-            output_serializer.data,
-            status=status.HTTP_201_CREATED
+            {"message": f"Payment initiated, complete the payment on your phone on {phone_number}"},
+            status=status.HTTP_200_OK,
         )
 
-    # Commented out create function for billing integration
-    # def create(self, request, *args, **kwargs):
-    #     phone_number = request.data.get('phone_number')
-    #     if not phone_number:
-    #         return Response({"error": "Phone number is required for billing"}, status=status.HTTP_400_BAD_REQUEST)
-        
-    #     # Assume billing API endpoint and logic
-    #     billing_url = "https://billing-service.example.com/charge"
-    #     billing_data = {
-    #         "phone_number": phone_number,
-    #         "amount": 400,  # Implement calculate_amount based on tickets
-    #     }
-        
-    #     response = requests.post(billing_url, json=billing_data)
-    #     if response.status_code != 200:
-    #         return Response({"error": "Billing failed"}, status=status.HTTP_400_BAD_REQUEST)
-        
-    #     # If billing successful, proceed with ticket creation
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     tickets = serializer.save()
-    #     response_serializer = PurchasedTicketResponseSerializer(tickets, many=True)
-    #     return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
+
+
+
+        # tickets = serializer.save()  # LIST comes back here
+        
+        # output_serializer = self.get_serializer(tickets, many=True)
+
+        # return Response(
+        #     output_serializer.data,
+        #     status=status.HTTP_201_CREATED
+        # )
+
+    

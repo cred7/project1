@@ -35,8 +35,20 @@ Content-Type: application/json
 
 {
     "template":"2",
+    "quantity":"1",
+    "buyer":"me@me.me",
+     "phone_number":"00"
+   
+}
+###
+POST  http://localhost:7000/api/payments/initiate/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "template_id":"5",
     "quantity":"3",
-    "buyer":"me@me.me"
+    "buyer":"me@me.me",
+     "phone_number":"00"
    
 }
 
@@ -85,6 +97,15 @@ Content-Type: application/json
 
 ###
 GET  http://localhost:7000/shop/one/user10/ HTTP/1.1
+Content-Type: application/json
+
+    {
+    "user":"user10@user.com",
+    "quantity":2
+    }'
+
+###
+GET  http://localhost:7000/api/payments/initiate/ HTTP/1.1
 Content-Type: application/json
 
     {

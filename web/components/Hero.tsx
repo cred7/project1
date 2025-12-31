@@ -38,7 +38,7 @@ export default async function Hero() {
 
   return (
     <div className="py-2">
-      <div className="max-w-mlg md:max-w-6xl mx-auto">
+      <div className="max-w-mlg md:max-w-7xl mx-auto">
         <div className="w-full  flex flex-col">
           <div className="w-full p-1">
             {!error ? <Links tickets={tickets} /> : "klklk"}

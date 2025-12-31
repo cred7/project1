@@ -42,11 +42,11 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
     setMessage("");
 
     try {
-      const res = await fetch(`${BASE_URL}/tickets/purchased/`, {
+      const res = await fetch(`${BASE_URL}/api/payments/initiate/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          template: ticketTypeId,
+          template_id: ticketTypeId,
           buyer: buyer,
           quantity: quantity,
           phone_number: phone,
@@ -60,11 +60,7 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
 
       const data = await res.json();
       console.log(data);
-      setMessage(
-        `Successfully purchased ${quantity} ticket(s)! Code: ${data.map(
-          (d: any) => `ticket code: ${d.ticket_code}`
-        )}`
-      );
+      setMessage(` ${data.message}`);
     } catch (err: any) {
       setMessage(err.message);
     } finally {
@@ -261,7 +257,7 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
         {message && (
           <div
             className={`p-4 rounded-lg border ${
-              message.includes("Successfully")
+              message.includes("STK")
                 ? "bg-green-50 border-green-200 text-green-800"
                 : "bg-red-50 border-red-200 text-red-800"
             }`}

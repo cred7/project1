@@ -25,14 +25,14 @@ const PlayerList: React.FC = async () => {
     }
   }
   return (
-    <section className="max-w-6xl m-auto p-4">
-      <div className="p-2 grid grid-cols-3 gap-1">
+    <section className="max-w-7xl m-auto p-4">
+      <div className="py-2 flex flex-row gap-1">
         {players ? (
-          players.slice(0, 3).map((player) => (
+          players.slice(0, 4).map((player) => (
             <Link
               key={player.id}
               href={`/player/${player.slug}`}
-              className="grid col-span-1 h-60"
+              className="grid flex-1 h-60"
             >
               <div className="relative bg-white rounded-none shadow-lg overflow-hidden hover:shadow-2xl transition cursor-pointer">
                 {/* Thumbnail */}

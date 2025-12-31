@@ -13,14 +13,14 @@ export type Ticket = {
 
 const Links = ({ tickets }: { tickets: Ticket }) => {
   return (
-    <div className="flex flex-wrap gap-3 justify-center">
+    <div className="flex w-full flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-3 justify-center">
       {tickets.map((p) => (
         <Link
           key={p.id}
           href={`/${p.slug}`}
-          className="flex-1 min-w-[280px] max-w-[320px]"
+          className="w-full sm:flex-1 sm:max-w-[410px] "
         >
-          <div className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 hover:border-green-300 group overflow-hidden h-full">
+          <div className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 hover:border-green-300 group overflow-hidden h-full rounded-none">
             {/* Header with date and H/A indicator */}
             <div className="bg-gradient-to-r from-green-700 to-green-600 px-3 py-2 flex justify-between items-center">
               <span className="text-white font-semibold text-xs">
@@ -39,9 +39,9 @@ const Links = ({ tickets }: { tickets: Ticket }) => {
             </div>
 
             {/* Match details */}
-            <div className="p-3">
+            <div className="sm:p-3 p-1 ">
               <div className="flex items-center justify-between mb-1">
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 flex md:flex-col">
                   <h3 className="font-bold text-gray-900 text-sm leading-tight truncate">
                     {p.team_a}
                   </h3>

@@ -11,7 +11,7 @@ class EventSerializer(serializers.ModelSerializer):
         read_only_fields = ['capacity', 'slug']
 
 
-#buying of tickets
+#confirming buoght tickets
 class PurchasedTicketSerializer(serializers.ModelSerializer):
     template_name = serializers.CharField(source="template.name", read_only=True)
     event_name = serializers.CharField(source="template.event.name", read_only=True)
@@ -33,30 +33,19 @@ class PurchasedTicketSerializer(serializers.ModelSerializer):
             "quantity"
             
         ] 
-        read_only_fields = ["id", "purchased_at","ticket_code", "status"]
-    
-    def create(self, validated_data):
-        buyer = validated_data["buyer"]
-        template = validated_data["template"]
-        quantity = validated_data.get('quantity', 1)  # Default to 1 if not provided
-        # Check availability
-        if template.remaining < quantity:
-            raise serializers.ValidationError(
-                f"Only {template.remaining} tickets remaining."
-            )
-
-        tickets = [
-            PurchasedTicket(
-                template=template,
-                buyer=buyer,
-                status="confirmed",
-            )
-            for _ in range(quantity)
-        ]
-
-        created_tickets = PurchasedTicket.objects.bulk_create(tickets)
-
-        return created_tickets
+        read_only_fields = [
+            "id",
+            "template",
+            "template_name",
+            "event_name",
+            "buyer",
+            "ticket_code",
+            "purchased_at",
+            "phone_number",
+            "status",
+            "quantity"
+            
+        ] 
 
 # confirming of tickets through scanning
 class TicketConfirmSerializer(serializers.ModelSerializer):

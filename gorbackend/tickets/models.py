@@ -57,9 +57,7 @@ class TicketTemplate(models.Model):
 class PurchasedTicket(models.Model):
     template = models.ForeignKey(TicketTemplate, on_delete=models.CASCADE, related_name="purchased_tickets")
     buyer = models.CharField(max_length=100)
-    # Unique per ticket
     ticket_code = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
-    # Status
     STATUS_CHOICES = [
         ("confirmed", "Confirmed"),
         ("used", "Used"),
@@ -67,13 +65,5 @@ class PurchasedTicket(models.Model):
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="confirmed")
     purchased_at = models.DateTimeField(auto_now_add=True)
-
-    # def scan(self):
-    #     """Move ticket from pending to confirmed"""
-    #     if self.status != "pending":
-    #         raise ValueError("Only pending tickets can be confirmed.")
-    #     self.status = "confirmed"
-    #     self.save()
-
     def __str__(self):
         return f"{self.template.name} - {self.ticket_code}"

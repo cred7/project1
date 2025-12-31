@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'news',
     'player',
     'shop',
-    'silk'
+    'silk',
+    'payement'
 ]
 
 MIDDLEWARE = [
@@ -89,10 +90,10 @@ DATABASES = {
         'NAME': 'gorbackend',
         'USER': 'postgres',
         'PASSWORD': 'password', 
-        # 'HOST': 'localhost',
-        # 'PORT': '5455',
-        'HOST': 'postgres',
-        'PORT': '5432',
+        'HOST': 'localhost',
+        'PORT': '5455',
+        # 'HOST': 'postgres',
+        # 'PORT': '5432',
         
     }
 }
@@ -118,8 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4000",
-    "http://frontend:4000",
-    "http://backend:7000"
+       
 ]
 CORS_ALLOW_HEADERS = [
     "authorization",
@@ -152,8 +152,8 @@ REST_FRAMEWORK = {
                                   'rest_framework.throttling.UserRateThrottle'
                                   ],
     'DEFAULT_THROTTLE_RATES': {
-                                'anon':'10/minute',
-                                'user':'5/minute',
+                                'anon':'30/minute',
+                                'user':'30/minute',
                                                     }
 }
 
@@ -173,9 +173,11 @@ AUTH_USER_MODEL = 'account.User'
 CACHES = {
     'default': {    
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',
+        'LOCATION': 'redis://localhost:6379/1',
         'OPTIONS': {
             "CLIENT_CLASS": 'django_redis.client.DefaultClient',    
         }
     }
   }
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
