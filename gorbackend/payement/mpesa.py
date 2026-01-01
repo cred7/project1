@@ -4,16 +4,35 @@ import requests
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
+from django.core.cache import cache
 
+
+MPESA_TOKEN_CACHE_KEY = "mpesa:access_token"
+MPESA_TOKEN_TTL_BUFFER = 100
 
 def get_access_token():
+    token = cache.get(MPESA_TOKEN_CACHE_KEY)
+    if token:
+         return token
+
     url = settings.MPESA_AUTH_URL
     response = requests.get(
         url,
         auth=(settings.MPESA_CONSUMER_KEY, settings.MPESA_CONSUMER_SECRET),
     )
     response.raise_for_status()
-    return response.json()["access_token"]
+
+    data = response.json()
+    token = data["access_token"]
+    expires_in = int(data["expires_in"])
+
+    cache.set(
+        MPESA_TOKEN_CACHE_KEY,
+        token,
+        timeout=expires_in - MPESA_TOKEN_TTL_BUFFER
+    )
+
+    return token
 
 
 def stk_push(phone_number,buyer, amount, reference):
