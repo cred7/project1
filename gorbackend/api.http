@@ -48,7 +48,7 @@ Content-Type: application/json
     "template_id":"5",
     "quantity":"3",
     "buyer":"me@me.me",
-     "phone_number":"00"
+    "phone_number":"00"
    
 }
 

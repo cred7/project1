@@ -53,7 +53,7 @@ class InitiatePaymentView(APIView):
                 # "transaction_id": tx.checkout_request_id,
                 
                 "status": "PENDING",
-                "message": f"STK Push sent to phone: {mpesa_response.message}",
+                "message": f"STK Push sent to phone: {mpesa_response}",
             },
             status=status.HTTP_201_CREATED,
         )

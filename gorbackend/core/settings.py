@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'player',
     'shop',
     'silk',
-    'payement'
+    'payement',
+    'gorbackend'
 ]
 
 MIDDLEWARE = [
@@ -90,10 +91,10 @@ DATABASES = {
         'NAME': 'gorbackend',
         'USER': 'postgres',
         'PASSWORD': 'password', 
-        'HOST': 'localhost',
-        'PORT': '5455',
-        # 'HOST': 'postgres',
-        # 'PORT': '5432',
+        # 'HOST': 'localhost',
+        # 'PORT': '5455',
+        'HOST': 'postgres',
+        'PORT': '5432',
         
     }
 }
@@ -173,11 +174,20 @@ AUTH_USER_MODEL = 'account.User'
 CACHES = {
     'default': {    
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/1',
+        'LOCATION': 'redis://redis:6379/1',
         'OPTIONS': {
             "CLIENT_CLASS": 'django_redis.client.DefaultClient',    
         }
     }
   }
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/1"
+
+CELERY_BROKER_URL = "amqp://guest:guest@rabbitmq:5672//"
+CELERY_RESULT_BACKEND = "rpc://"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+
+
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

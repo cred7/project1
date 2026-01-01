@@ -9,6 +9,7 @@ services:
       - "7000:7000"
     depends_on:
       - postgres
+      - redis
     command: >
       sh -c "python manage.py migrate &&
             python manage.py runserver 0.0.0.0:7000"
@@ -36,6 +37,27 @@ services:
     ports:
       - "6379:6379"
     restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  celery:
+    build:
+      context: ./gorbackend
+    container_name: celery_worker
+    volumes:
+      - ./gorbackend:/app
+    command: celery -A gorbackend worker -l info
+    depends_on:
+      - backend
+      - rabbitmq
 
   postgres:
     image: postgres
