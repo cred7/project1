@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +29,18 @@ SECRET_KEY = 'django-insecure-vto(d5y-p*90v$7$08#h_5zn8%e0efp^@#$sxi4#2tf2%dz*-!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend","196.201.214.200",
+"196.201.214.206",
+"196.201.213.114",
+"196.201.214.207",
+"196.201.214.208",
+"196.201.213.44",
+"196.201.212.127",
+"196.201.212.138",
+"196.201.212.129",
+"196.201.212.136",
+"196.201.212.74",
+"196.201.212.69"]
 
 
 # Application definition
@@ -92,10 +106,10 @@ DATABASES = {
         'NAME': 'gorbackend',
         'USER': 'postgres',
         'PASSWORD': 'password', 
-        # 'HOST': 'localhost',
-        # 'PORT': '5455',
-        'HOST': 'postgres',
-        'PORT': '5432',
+        'HOST': 'localhost',
+        'PORT': '5455',
+        # 'HOST': 'postgres',
+        # 'PORT': '5432',
         
     }
 }
@@ -175,14 +189,14 @@ AUTH_USER_MODEL = 'account.User'
 CACHES = {
     'default': {    
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redis:6379/1',
+        'LOCATION': 'redis://localhost:6379/1',
         'OPTIONS': {
             "CLIENT_CLASS": 'django_redis.client.DefaultClient',    
         }
     }
   }
 
-CELERY_BROKER_URL = "amqp://guest:guest@rabbitmq:5672//"
+CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
 CELERY_RESULT_BACKEND = "rpc://"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
@@ -198,4 +212,6 @@ MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
 MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
 MPESA_PASSKEY = os.getenv("MPESA_PASSKEY")
 MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
+MPESA_STK_PUSH_URL = os.getenv("MPESA_STK_PUSH_URL")
+MPESA_AUTH_URL = os.getenv("MPESA_AUTH_URL")
 MPESA_ENV = os.getenv("MPESA_ENV", "sandbox")

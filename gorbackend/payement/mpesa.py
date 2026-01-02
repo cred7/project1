@@ -12,7 +12,8 @@ MPESA_TOKEN_TTL_BUFFER = 100
 
 def get_access_token():
     token = cache.get(MPESA_TOKEN_CACHE_KEY)
-    if token:
+    if token: 
+         print("got token from redis")
          return token
 
     url = settings.MPESA_AUTH_URL
@@ -31,45 +32,47 @@ def get_access_token():
         token,
         timeout=expires_in - MPESA_TOKEN_TTL_BUFFER
     )
-
+    print("got token not from redis")
     return token
 
 
 def stk_push(phone_number,buyer, amount, reference):
-    # access_token = get_access_token()
-    # timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+   
+    access_token = get_access_token()
+    print(f"my tokkkkkkkk{access_token}")
+    timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
 
     # password = base64.b64encode(
     #     f"{settings.MPESA_SHORTCODE}{settings.MPESA_PASSKEY}{timestamp}".encode()
     # ).decode()
 
-    # payload = {
-    #     "BusinessShortCode": settings.MPESA_SHORTCODE,
-    #     "Password": password,
-    #     "Timestamp": timestamp,
-    #     "TransactionType": "CustomerPayBillOnline",
-    #     "Amount": int(amount),
-    #     "PartyA": phone_number,
-    #     "PartyB": settings.MPESA_SHORTCODE,
-    #     "PhoneNumber": phone_number,
-    #     "CallBackURL": settings.MPESA_CALLBACK_URL,
-    #     "AccountReference": reference,
-    #     "TransactionDesc": "Ticket Purchase",
-    # }
+    payload = {
+        "BusinessShortCode": settings.MPESA_SHORTCODE,
+        "Password": settings.MPESA_PASSKEY,
+        "Timestamp": timestamp,
+        "TransactionType": "CustomerPayBillOnline",
+        "Amount": int(amount),
+        "PartyA": phone_number,
+        "PartyB": settings.MPESA_SHORTCODE,
+        "PhoneNumber": phone_number,
+        "CallBackURL": settings.MPESA_CALLBACK_URL,
+        "AccountReference": reference,
+        "TransactionDesc": f"Ticket Purchase for {buyer}",
+    }
 
-    # headers = {
-    #     "Authorization": f"Bearer {access_token}",
-    #     "Content-Type": "application/json",
-    # }
-
-    # response = requests.post(
-    #     settings.MPESA_STK_PUSH_URL, json=payload, headers=headers
-    # )
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+    }
+   
+    response = requests.post(
+        settings.MPESA_STK_PUSH_URL, json=payload, headers=headers
+    )
 
     # response.raise_for_status()
-    # return response.json()
+    return response.json()
 
-     return Response(
-            {"message": f"Payment initiated, complete the payment on your phone on {phone_number}, by byuyer {buyer}"},
-            status=status.HTTP_200_OK,
-        )
+    #  return Response(
+    #         {"message": f"Payment initiated, complete the payment on your phone on {phone_number}, by byuyer {buyer}"},
+    #         status=status.HTTP_200_OK,
+    #     )
