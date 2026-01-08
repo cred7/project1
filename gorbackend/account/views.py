@@ -11,8 +11,6 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
     
 
-    
-
 class MeView(generics.RetrieveAPIView):
     serializer_class = RegisterSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -27,6 +25,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['role'] = user.role  # include role in token
         return token
+    
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -36,7 +36,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
         serializer.is_valid(raise_exception=True)
         user = serializer.user
 
-        tokens = serializer.validated_data  # contains refresh + acces
+        tokens = serializer.validated_data  # contains refresh + access
         access_token = str(tokens.get("access"))
         refresh_token = str(tokens.get("refresh"))
 

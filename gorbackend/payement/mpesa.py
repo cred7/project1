@@ -41,6 +41,7 @@ def stk_push(phone_number,buyer, amount, reference):
     access_token = get_access_token()
     print(f"my tokkkkkkkk{access_token}")
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    password = settings.MPESA_PASSKEY
 
     # password = base64.b64encode(
     #     f"{settings.MPESA_SHORTCODE}{settings.MPESA_PASSKEY}{timestamp}".encode()
@@ -48,7 +49,7 @@ def stk_push(phone_number,buyer, amount, reference):
 
     payload = {
         "BusinessShortCode": settings.MPESA_SHORTCODE,
-        "Password": settings.MPESA_PASSKEY,
+        "Password": password,
         "Timestamp": timestamp,
         "TransactionType": "CustomerPayBillOnline",
         "Amount": int(amount),

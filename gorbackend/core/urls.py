@@ -29,6 +29,7 @@ urlpatterns = [
     path('matches/', include('matches.urls')),
     path('tickets/', include('tickets.urls')),
     path("api/payments/", include("payement.urls")),
+    path("ws/", include("liveupdate.urls")),
 
 ]
 

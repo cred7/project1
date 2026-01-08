@@ -1,6 +1,7 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { ApiError, fetchWithCredentials } from "@/lib/utils/api";
 import Link from "next/link";
+import LiveMatchUpdates from "./LiveMatchUpdates";
 
 type NewsItem = {
   id: string;
@@ -20,6 +21,7 @@ export default async function HomeNews() {
 
   try {
     fetchNews = await fetchWithCredentials(`${BASE_URL}/news/`);
+    console.log("Fetched news:", fetchNews);
   } catch (error: any) {
     if (error instanceof ApiError) {
       console.error("Failed to fetch news:", error.message);
@@ -67,7 +69,7 @@ export default async function HomeNews() {
           </svg>
         </Link>
       </div>
-
+      <LiveMatchUpdates matchId="2" />
       <div className="grid grid-cols-1 md:grid-cols-3 p-3 gap-y-6 gap-x-3 md:h-[50vh] lg:h-[90vh] bg-gradient-to-r from-green-700 to-green-600">
         {/* Main headline */}
         <Link

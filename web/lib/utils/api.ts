@@ -26,6 +26,8 @@ export const fetchWithCredentials = async (
     });
 
     let data: any = null;
+    console.log("Response status:", response.status);
+    console.log("Response status:", response);
     try {
       data = await response.json();
     } catch {

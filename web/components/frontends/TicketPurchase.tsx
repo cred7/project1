@@ -1,5 +1,6 @@
 "use client";
 
+import { g } from "@/app/[id]/page";
 import { useState } from "react";
 
 type TicketType = {
@@ -31,6 +32,7 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
   const [phone, setPhone] = useState<string>("");
   const [buyer, setbuyer] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [trial, trials] = useState<string | undefined>("");
   const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -55,6 +57,7 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
 
       if (!res.ok) {
         const err = await res.json();
+        g(err);
         throw new Error(err.detail || "Failed to purchase ticket");
       }
 
@@ -62,6 +65,7 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
       console.log(data);
       setMessage(` ${data.message}`);
     } catch (err: any) {
+      g(err);
       setMessage(err.message);
     } finally {
       setLoading(false);
@@ -74,8 +78,14 @@ export default function TicketPurchaseForm({ event }: TicketPurchaseFormProps) {
       <div className="bg-gradient-to-r from-green-700 to-green-600 px-6 py-4">
         <h2 className="text-xl font-bold text-white mb-1">{event.name}</h2>
         <p className="text-green-100 text-sm">
-          {event.team_a} vs {event.team_b}
+          {event.team_a} vs {event.team_b} -{BASE_URL}
         </p>
+        <button
+          className="bg-red"
+          onClick={() => trials(process.env.NEXT_PUBLIC_API_URL)}
+        >
+          REDDDD --{trial}
+        </button>
       </div>
 
       {/* Event Details */}

@@ -8,18 +8,19 @@ from django.db import transaction
 
 from .models import PaymentTransaction
 from .serializers import InitiatePaymentSerializer
-from .mpesa import stk_push
+from .mpesa import stk_push,get_access_token
 from tickets.models import TicketTemplate
 from tickets.services import create_tickets_from_transaction  # we'll define this
+from django.utils.decorators import method_decorator
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 class InitiatePaymentView(APIView):
     permission_classes = [AllowAny]
-
+    authentication_classes = [] 
     def post(self, request):
         serializer = InitiatePaymentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         template = TicketTemplate.objects.get(
             id=serializer.validated_data["template_id"]
         )
@@ -42,7 +43,8 @@ class InitiatePaymentView(APIView):
         #         phone_number=phone,
         #         amount=amount,
         #     )
-        # create_tickets_from_transaction(buyer,template,quantity)
+        
+        # mpesa_response = stk_push(phone,buyer, amount, f"TICKET-{template.id}")
         mpesa_response = stk_push(phone,buyer, amount, f"TICKET-{template.id}")
         # if not mpesa_response or "CheckoutRequestID" not in mpesa_response:
         #     tx.status = "FAILED"
@@ -52,9 +54,7 @@ class InitiatePaymentView(APIView):
         # tx.merchant_request_id=mpesa_response["MerchantRequestID"],
         # txcheckout_request_id=mpesa_response["CheckoutRequestID"],
         # tx.save
-        print(mpesa_response)
-
-      
+        print(mpesa_response)      
         create_tickets_from_transaction(buyer,template,quantity)
 
         return Response(

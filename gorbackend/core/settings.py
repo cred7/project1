@@ -29,18 +29,22 @@ SECRET_KEY = 'django-insecure-vto(d5y-p*90v$7$08#h_5zn8%e0efp^@#$sxi4#2tf2%dz*-!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend","196.201.214.200",
-"196.201.214.206",
-"196.201.213.114",
-"196.201.214.207",
-"196.201.214.208",
-"196.201.213.44",
-"196.201.212.127",
-"196.201.212.138",
-"196.201.212.129",
-"196.201.212.136",
-"196.201.212.74",
-"196.201.212.69"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend",
+                 "cf4xq7t7-7000.euw.devtunnels.ms",
+                 "cf4xq7t7-9000.euw.devtunnels.ms"
+# "196.201.214.200",
+# "196.201.214.206",
+# "196.201.213.114",
+# "196.201.214.207",
+# "196.201.214.208",
+# "196.201.213.44",
+# "196.201.212.127",
+# "196.201.212.138",
+# "196.201.212.129",
+# "196.201.212.136",
+# "196.201.212.74",
+# "196.201.212.69"
+]
 
 
 # Application definition
@@ -53,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "corsheaders",
+    "channels",
+    "liveupdate",
     'account',
     'rest_framework',
     'matches',
@@ -66,8 +72,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'silk.middleware.SilkyMiddleware',
+#    "core.middleware.ForceOptionsMiddleware", 
     "corsheaders.middleware.CorsMiddleware",
+    # "core.middleware.AllowOptionsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'silk.middleware.SilkyMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -95,6 +103,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = "core.asgi.application"
 
 
 # Database
@@ -106,8 +115,8 @@ DATABASES = {
         'NAME': 'gorbackend',
         'USER': 'postgres',
         'PASSWORD': 'password', 
-        'HOST': 'localhost',
-        'PORT': '5455',
+        'HOST': os.getenv("HOST"),
+        'PORT': os.getenv("PORT"),
         # 'HOST': 'postgres',
         # 'PORT': '5432',
         
@@ -135,13 +144,31 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4000",
+    "https://cf4xq7t7-4000.euw.devtunnels.ms"
+    
        
 ]
-CORS_ALLOW_HEADERS = [
+# CORS_ALLOW_HEADERS = [
+#     "authorization",
+#     "content-type",
+#      "x-csrftoken",
+# ]
+
+from corsheaders.defaults import default_headers
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
     "authorization",
     "content-type",
+    "x-csrftoken",
 ]
 CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://cf4xq7t7-4000.euw.devtunnels.ms",
+]
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -156,12 +183,15 @@ USE_TZ = True
 
 # settings.py
 REST_FRAMEWORK = {
+     "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
     'EXCEPTION_HANDLER': 'rest_framework.views.exception_handler',
 
     'DEFAULT_THROTTLE_CLASSES' : ['rest_framework.throttling.AnonRateThrottle',
@@ -195,13 +225,23 @@ CACHES = {
         }
     }
   }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
-CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
+
+
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER')
 CELERY_RESULT_BACKEND = "rpc://"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-
 
 
 
@@ -215,3 +255,4 @@ MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
 MPESA_STK_PUSH_URL = os.getenv("MPESA_STK_PUSH_URL")
 MPESA_AUTH_URL = os.getenv("MPESA_AUTH_URL")
 MPESA_ENV = os.getenv("MPESA_ENV", "sandbox")
+

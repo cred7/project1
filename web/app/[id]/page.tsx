@@ -4,6 +4,10 @@ import { fetchWithCredentials } from "@/lib/utils/api";
 
 const BASE_URL = process.env.API_URL;
 
+export const g = (home: any) => {
+  console.log(home);
+};
+
 async function getPlayer(id: string): Promise<Ticket> {
   let ids = id || "1";
   const res = await fetchWithCredentials(

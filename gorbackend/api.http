@@ -72,7 +72,7 @@ Content-Type: application/json
 
 }
 ###
-GET http://localhost:7000/news/ HTTP/1.1
+GET http://localhost:7000/api/payments// HTTP/1.1
 
 {
     "title":"Good Morning",
