@@ -9,6 +9,7 @@ export default function NewsHero({ item }: { item: NewsItem }) {
     <Link href={`/news/${item.slug}`}>
       <Card className="relative h-[420px] overflow-hidden">
         <img
+          // src={item.thumbnail}
           src={item.thumbnail}
           alt={item.title}
           className="absolute inset-0 h-full w-full object-cover"

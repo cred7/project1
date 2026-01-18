@@ -1,6 +1,12 @@
 from core.settings import *
 
-CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
+# CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
+# CELERY_RESULT_BACKEND = "rpc://"
+# CELERY_ACCEPT_CONTENT = ["json"]
+# CELERY_TASK_SERIALIZER = "json"
+# CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER')
 CELERY_RESULT_BACKEND = "rpc://"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"

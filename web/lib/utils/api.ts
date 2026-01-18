@@ -16,11 +16,12 @@ export const fetchWithCredentials = async (
   options: RequestInit = {}
 ) => {
   try {
+    const isFormData = options.body instanceof FormData;
     const response = await fetch(url, {
       ...options,
       credentials: "include",
       headers: {
-        "Content-Type": "application/json",
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
         ...(options.headers || {}),
       },
     });
