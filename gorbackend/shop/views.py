@@ -12,21 +12,17 @@ from .serializers import ProductSerializer,OrderSerializer, ProductPurchaseSeria
 class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [AllowAny]
-    
+    permission_classes = [AllowAny] 
        # Normal CRUD serializer
-
-    @action(detail=True, methods=["put"], permission_classes=[AllowAny])
+    @action(detail=True, methods=["put"],permission_classes=[AllowAny])
     def purchase(self, request, pk=None):
         product = self.get_object()
-
         serializer = ProductPurchaseSerializer(
             product,
             data=request.data,
             partial=True,
             context={'request': request}
         )
-
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

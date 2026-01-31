@@ -8,4 +8,5 @@ router.register(r'', MatchViewSet, basename='match')
 
 urlpatterns = [
     path('update-score/<int:match_id>/', UpdateScoreAPIView.as_view(), name="update-score"),
+    path('update-score/', UpdateScoreAPIView.as_view(), name="update-score"),
 ] + router.urls

@@ -262,6 +262,7 @@ const AdminPage = () => {
         >
           News
         </Button>
+
         <Button
           onClick={() => setActiveTab("players")}
           variant={activeTab === "players" ? "default" : "outline"}

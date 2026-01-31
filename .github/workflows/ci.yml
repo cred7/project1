@@ -1,0 +1,76 @@
+name: Gor CI workflow
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # services section to define dependent services
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: ${{secrets.postgres}}
+          POSTGRES_PASSWORD: ${{secrets.password}}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+      rabbitmq:
+        image: rabbitmq:3-management
+        env:
+          RABBITMQ_DEFAULT_USER: ${{secrets.rabbitmq_user}}
+          RABBITMQ_DEFAULT_PASS: ${{secrets.rabbitmq_password}}
+        ports:
+          - 5672:5672
+          - 15672:15672
+        #   steps for installing dependencies and running tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: set up nextjs
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      #  waiting for services to be ready
+      - name: Wait for Postgres to be ready
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+              echo "Waiting for Postgres..."
+              sleep 2
+          done
+      # install dependencies and run tests
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r gorbackend/requirements.txt
+        working-directory: ./gorbackend
+      - name: Run tests
+        env:
+          DATABASE_URL: ${{secrets.database_url}}
+          REDIS_URL: ${{secrets.redis_url}}
+          CELERY_BROKER: ${{secrets.celery_broker}}
+        run: |
+          python -m unittest discover -s gorbackend/tests
+        working-directory: ./gorbackend
+
+      - name: Install Next.js dependencies
+        run: |
+          npm install
+          npm run dev -- --port 4000
+        working-directory: ./web

@@ -95,3 +95,14 @@ export type ProductFormData = {
   created_at?: string;
   merchImage?: File | string;
 };
+export type Order = {
+  id: string;
+  total_amount: string;
+  created_at: string;
+  created_by: string;
+  item: {
+    product: string;
+    quantity: string;
+    price: string;
+  };
+};

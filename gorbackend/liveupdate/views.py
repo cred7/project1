@@ -10,7 +10,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 class MatchViewSet(ModelViewSet):
-    queryset = Match.objects.all().order_by('-date')
+    queryset = Match.objects.all().order_by('date')
     serializer_class = MatchSerializer
     permission_classes = [AllowAny]
     lookup_field = 'id'
@@ -25,11 +25,9 @@ class UpdateScoreAPIView(APIView):
         try:
             print("Match ID:", match_id)
             match = Match.objects.get(id=match_id)
-
             # match = 1
         except Match.DoesNotExist:
             return Response({"error": "Match not found"}, status=status.HTTP_404_NOT_FOUND)
-
         serializer = UpdateScoreSerializer(match, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
