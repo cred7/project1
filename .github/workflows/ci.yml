@@ -12,8 +12,8 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: ${{secrets.postgres}}
-          POSTGRES_PASSWORD: ${{secrets.password}}
+          POSTGRES_USER: ${{secrets.POSTGRES}}
+          POSTGRES_PASSWORD: ${{secrets.PASSWORD}}
         ports:
           - 5432:5432
         options: >-
@@ -28,8 +28,8 @@ jobs:
       rabbitmq:
         image: rabbitmq:3-management
         env:
-          RABBITMQ_DEFAULT_USER: ${{secrets.rabbitmq_user}}
-          RABBITMQ_DEFAULT_PASS: ${{secrets.rabbitmq_password}}
+          RABBITMQ_DEFAULT_USER: ${{secrets.RABBITMQ_USER}}
+          RABBITMQ_DEFAULT_PASS: ${{secrets.RABBITMQ_PASSWORD}}
         ports:
           - 5672:5672
           - 15672:15672
@@ -62,10 +62,14 @@ jobs:
         working-directory: ./gorbackend
       - name: Run tests
         env:
-          DATABASE_URL: ${{secrets.database_url}}
-          REDIS_URL: ${{secrets.redis_url}}
-          CELERY_BROKER: ${{secrets.celery_broker}}
+          #   DATABASE_URL: $secrets.database_url}}
+          REDIS_URL: ${{secrets.REDIS_URL}}
+          CELERY_BROKER: ${{secrets.CELERY_BROKER}}
+          HOST: "postgres"
+          PORT: "5432"
         run: |
+          python manage.py migrate &&
+          daphne -b 0.0.0.0 -p 7000 core.asgi:application
           python -m unittest discover -s gorbackend/tests
         working-directory: ./gorbackend
 
