@@ -112,9 +112,9 @@ ASGI_APPLICATION = "core.asgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gorbackend',
-        'USER': 'postgres',
-        'PASSWORD': 'password', 
+        'NAME': os.getenv("POSTGRES_DB"),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
         'HOST': os.getenv("HOST"),
         'PORT': os.getenv("PORT"),
         # 'HOST': 'postgres',
@@ -144,6 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4000",
+    "http://localhost:5000",
     "https://cf4xq7t7-4000.euw.devtunnels.ms"
     
        
@@ -219,7 +220,7 @@ AUTH_USER_MODEL = 'account.User'
 CACHES = {
     'default': {    
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/1',
+        'LOCATION': os.getenv("REDIS_URL"),
         'OPTIONS': {
             "CLIENT_CLASS": 'django_redis.client.DefaultClient',    
         }
@@ -229,7 +230,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [os.getenv("REDIS_URL")],
         },
     },
 }
@@ -255,4 +256,13 @@ MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
 MPESA_STK_PUSH_URL = os.getenv("MPESA_STK_PUSH_URL")
 MPESA_AUTH_URL = os.getenv("MPESA_AUTH_URL")
 MPESA_ENV = os.getenv("MPESA_ENV", "sandbox")
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],
+#         },
+#     },
+# }
 

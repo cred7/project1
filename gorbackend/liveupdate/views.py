@@ -2,10 +2,19 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Match
-from .serializer import UpdateScoreSerializer
+from .serializer import UpdateScoreSerializer, MatchSerializer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+
+class MatchViewSet(ModelViewSet):
+    queryset = Match.objects.all().order_by('date')
+    serializer_class = MatchSerializer
+    permission_classes = [AllowAny]
+    lookup_field = 'id'
+
 
 class UpdateScoreAPIView(APIView):
     """
@@ -16,11 +25,9 @@ class UpdateScoreAPIView(APIView):
         try:
             print("Match ID:", match_id)
             match = Match.objects.get(id=match_id)
-
             # match = 1
         except Match.DoesNotExist:
             return Response({"error": "Match not found"}, status=status.HTTP_404_NOT_FOUND)
-
         serializer = UpdateScoreSerializer(match, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -32,8 +39,10 @@ class UpdateScoreAPIView(APIView):
                 {
                     "type": "score_update",
                     "score": {
-                        "teamA": serializer.data["teamA_score"],
-                        "teamB": serializer.data["teamB_score"],
+                       "teamA_name": match.teamA,
+                        "teamA_score": serializer.data["teamA_score"],
+                        "teamB_name": match.teamB,
+                        "teamB_score": serializer.data["teamB_score"],
                         "minute": serializer.data["current_minute"],
                         "status": serializer.data["status"],
                     }

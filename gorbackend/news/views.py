@@ -15,3 +15,7 @@ class NewsViewSet(ModelViewSet):
             return [AllowAny()]
         # Only authenticated staff can create/update/delete
         return [IsAdminUser()]
+
+
+
+    

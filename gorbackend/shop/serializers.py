@@ -33,6 +33,17 @@ class ProductPurchaseSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         user = validated_data['user']
         qty = validated_data['quantity']
+        
+        try:
+            user = User.objects.get(email=user)
+        except User.DoesNotExist:
+            raise serializers.ValidationError ("User not found")
+        
+        order = Order.objects.create(
+            user=user,
+            total_amount=total_price)
+# check if the email of the user is
+        
 
         # Validate stock
         if qty <= 0:
@@ -48,11 +59,8 @@ class ProductPurchaseSerializer(serializers.ModelSerializer):
         total_price = instance.price * qty
 
         # Create order
-        user = User.objects.get(email=user)
-        order = Order.objects.create(
-            user=user,
-            total_amount=total_price
-        )
+       
+       
 
         # Create order item
         order_item = OrderItem.objects.create(
@@ -67,6 +75,7 @@ class ProductPurchaseSerializer(serializers.ModelSerializer):
         self.context['total_price'] = total_price
         self.context['order'] = order
         self.context['order_item'] = order_item
+        self.context['user'] = user
 
         return instance
 

@@ -1,10 +1,17 @@
 services:
   backend:
-    build:
-      context: ./gorbackend
+    image: cred7/gorbackend:latest
+    # build:
+    #   context: ./gorbackend
     container_name: django-backend
     environment:
-      - REDIS_URL=redis:6378
+      REDIS_URL: "redis://redis:6379/1"
+      POSTGRES_DB: "gorbackend"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      HOST: "postgres"
+      PORT: "5432"
+      CELERY_BROKER: "amqp://guest:guest@rabbitmq:5672//"
     volumes:
       - ./gorbackend:/app
     ports:
@@ -14,20 +21,21 @@ services:
       - redis
     command: >
       sh -c "python manage.py migrate &&
-            python manage.py runserver 0.0.0.0:7000"
+             daphne -b 0.0.0.0 -p 7000 core.asgi:application"
 
   frontend:
-    build:
-      context: ./web
+    image: cred7/webrepo:latest
+    # build:
+    #   context: ./web
     container_name: nextjs-frontend
-
-    volumes:
-      - ./web:/app
-      - /app/node_modules
+    # volumes:
+    #   - ./web:/app
+    #   - /app/node_modules
     ports:
       - "4000:4000"
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:7000
+      NEXT_PUBLIC_WS_API_URL: ws://localhost:7000
       API_URL: http://backend:7000
       PORT: 4000
     depends_on:
@@ -51,9 +59,15 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
 
   celery:
-    build:
-      context: ./gorbackend
+    image: cred7/gorbackend:latest
+    # build:
+    #   context: ./gorbackend
     container_name: celery_worker
+    environment:
+      REDIS_URL: "redis://redis:6379/1"
+      HOST: "postgres"
+      PORT: "5432"
+      CELERY_BROKER: "amqp://guest:guest@rabbitmq:5672//"
     volumes:
       - ./gorbackend:/app
     command: celery -A gorbackend worker -l info

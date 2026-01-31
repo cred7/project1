@@ -50,13 +50,59 @@ export interface Product {
   merchImage?: string;
 }
 
-export interface Order {
+export interface Match {
   id: number;
+  teamA: string;
+  teamB: string;
+  teamA_score: number;
+  teamB_score: number;
+  current_minute: number;
+  status: string;
+  date: string;
+}
+
+export type NewsFormData = {
+  id?: number;
+  title?: string;
+  content?: string;
+  author?: string;
+  thumbnail?: File | string;
+  slug?: string;
+};
+
+export type PlayerFormData = {
+  id?: number;
+  first_name?: string;
+  last_name?: string;
+  position?: string;
+  team?: string;
+  number?: number;
+  nationality?: string;
+  dob?: string;
+  height?: number;
+  weight?: number;
+  bio?: string;
+  thumbnails?: File | string | null;
+  slug?: string;
+};
+
+export type ProductFormData = {
+  id?: number;
+  name?: string;
+  description?: string;
+  price?: number;
+  stock?: number;
+  created_at?: string;
+  merchImage?: File | string;
+};
+export type Order = {
+  id: string;
   total_amount: string;
   created_at: string;
+  created_by: string;
   item: {
     product: string;
-    quantity: number;
+    quantity: string;
     price: string;
   };
-}
+};

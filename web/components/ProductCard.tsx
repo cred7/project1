@@ -1,4 +1,5 @@
 "use client";
+import { useAuthStore } from "@/lib/hooks/useAuthStore";
 import { Order, Product } from "@/lib/types";
 import React, { useState } from "react";
 
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const ProductCard: React.FC<Props> = ({ product }) => {
+  const user = useAuthStore((state) => state.user?.email);
   const [quantity, setQuantity] = useState<number>(1);
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -24,13 +26,14 @@ const ProductCard: React.FC<Props> = ({ product }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user: "user@user.com", // replace with logged-in user's email
+          user: user, // replace with logged-in user's email
           quantity,
         }),
       });
 
       if (!response.ok) {
         const err = await response.json();
+        console.log(err);
         setError(err.detail || "Purchase failed");
         setLoading(false);
         return;
@@ -40,6 +43,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
       setOrder(data.order);
       setLoading(false);
     } catch (err: any) {
+      console.log(err);
       setError("Something went wrong");
       setLoading(false);
     }

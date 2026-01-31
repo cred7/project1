@@ -13,7 +13,7 @@ import Link from "next/link";
 export default function NewsCard({ item }: { item: NewsItem }) {
   return (
     <Link href={`/news/${item.slug}`} className="block">
-      <Card className="h-full hover:shadow-md transition">
+      <Card className="h-full hover:shadow-md transition pt-0 mt-4">
         {/* Image */}
         <div className="h-48 overflow-hidden rounded-t-xl">
           <img

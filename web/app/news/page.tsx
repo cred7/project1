@@ -2,6 +2,7 @@ import NewsCard from "@/components/news/NewsCard";
 import NewsHero from "@/components/news/NewsHero";
 import { NewsItem } from "@/lib/types";
 import { ApiError, fetchWithCredentials } from "@/lib/utils/api";
+import Link from "next/link";
 
 const BASE_URL = process.env.API_URL;
 
@@ -38,9 +39,19 @@ export default async function NewsPage() {
       <NewsHero item={headline} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {rest.map((item) => (
+        {rest.slice(0, 3).map((item) => (
           <NewsCard key={item.id} item={item} />
         ))}
+      </div>
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <h2 className="text-xl font-bold mb-4">More News</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {rest.slice(3).map((item) => (
+            <Link key={item.id} href={`/news/${item.slug}`} className="block  ">
+              {item.title} ....
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
