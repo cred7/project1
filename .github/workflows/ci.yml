@@ -59,7 +59,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r gorbackend/requirements.txt
-        working-directory: ./gorbackend
+        working-directory: gorbackend
       - name: Run tests
         env:
           #   DATABASE_URL: $secrets.database_url}}
@@ -71,10 +71,10 @@ jobs:
           python manage.py migrate &&
           daphne -b 0.0.0.0 -p 7000 core.asgi:application
           python -m unittest discover -s gorbackend/tests
-        working-directory: ./gorbackend
+        working-directory: gorbackend
 
       - name: Install Next.js dependencies
         run: |
           npm install
           npm run dev -- --port 4000
-        working-directory: ./web
+        working-directory: web
