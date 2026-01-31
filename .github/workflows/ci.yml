@@ -65,7 +65,7 @@ jobs:
           #   DATABASE_URL: $secrets.database_url}}
           REDIS_URL: ${{secrets.REDIS_URL}}
           CELERY_BROKER: ${{secrets.CELERY_BROKER}}
-          HOST: "postgres"
+          HOST: "localhost"
           PORT: "5432"
         run: |
           python manage.py migrate &&
