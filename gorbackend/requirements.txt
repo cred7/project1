@@ -1,8 +1,8 @@
 ﻿amqp==5.3.1
 asgiref==3.11.0
 attrs==25.4.0
-# autobahn==25.12.2
-autobahn
+autobahn==25.12.2
+# autobahn
 Automat==25.4.16
 billiard==4.2.4
 cbor2==5.8.0
@@ -12,8 +12,7 @@ cffi==2.0.0
 channels==4.3.2
 channels_redis==4.3.0
 charset-normalizer==3.4.4
-# click==8.3.1
-click
+click==8.3.1
 click-didyoumean==0.3.1
 click-plugins==1.1.1.2
 click-repl==0.3.0
@@ -64,5 +63,6 @@ urllib3==2.6.2
 vine==5.1.0
 wcwidth==0.2.14
 zope.interface==8.1.1
+
 
 
