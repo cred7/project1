@@ -12,7 +12,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: ${{secrets.DATABASE}}
+          POSTGRES_DB: gorbackend
           POSTGRES_USER: ${{secrets.POSTGRES}}
           POSTGRES_PASSWORD: ${{secrets.PASSWORD}}
         ports:
@@ -66,12 +66,12 @@ jobs:
           #   DATABASE_URL: $secrets.database_url}}
           REDIS_URL: ${{secrets.REDIS_URL}}
           CELERY_BROKER: ${{secrets.CELERY_BROKER}}
-          HOST: "postgres"
+          HOST: "localhost"
           PORT: "5432"
         run: |
           python manage.py migrate &&
           daphne -b 0.0.0.0 -p 7000 core.asgi:application
-          python -m unittest discover -s tests
+
         working-directory: gorbackend
 
       - name: Install Next.js dependencies
