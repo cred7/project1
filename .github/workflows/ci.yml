@@ -12,6 +12,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
+          POSTGRES_DB: gorbackend
           POSTGRES_USER: ${{secrets.POSTGRES}}
           POSTGRES_PASSWORD: ${{secrets.PASSWORD}}
         ports:
