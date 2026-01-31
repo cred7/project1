@@ -12,6 +12,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
+          POSTGRES_DB: ${{secrets.DATABASE}}
           POSTGRES_USER: ${{secrets.POSTGRES}}
           POSTGRES_PASSWORD: ${{secrets.PASSWORD}}
         ports:
@@ -41,7 +42,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          python-version: "3.13.1"
 
       - name: set up nextjs
         uses: actions/setup-node@v3

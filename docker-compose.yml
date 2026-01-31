@@ -6,6 +6,9 @@ services:
     container_name: django-backend
     environment:
       REDIS_URL: "redis://redis:6379/1"
+      POSTGRES_DB: "gorbackend"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
       HOST: "postgres"
       PORT: "5432"
       CELERY_BROKER: "amqp://guest:guest@rabbitmq:5672//"
