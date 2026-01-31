@@ -63,13 +63,12 @@ jobs:
         working-directory: gorbackend
       - name: Run tests
         env:
-          #   DATABASE_URL: $secrets.database_url}}
           REDIS_URL: ${{secrets.REDIS_URL}}
           CELERY_BROKER: ${{secrets.CELERY_BROKER}}
-          POSTGRES_DB: "gorbackend"
-          POSTGRES_USER: "postgres"
-          POSTGRES_PASSWORD: "password"
-          HOST: "localhost"
+          POSTGRES_DB: ${{secrets.POSTGRES_DB}}
+          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          HOST: ${{vars.POSTGRES_HOST}}
           PORT: "5432"
         run: |
           python manage.py migrate &&
@@ -80,5 +79,5 @@ jobs:
       - name: Install Next.js dependencies
         run: |
           npm install
-          npm run dev -- --port 4000
+          npm run build
         working-directory: web
