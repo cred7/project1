@@ -66,6 +66,9 @@ jobs:
           #   DATABASE_URL: $secrets.database_url}}
           REDIS_URL: ${{secrets.REDIS_URL}}
           CELERY_BROKER: ${{secrets.CELERY_BROKER}}
+          POSTGRES_DB: "gorbackend"
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "password"
           HOST: "localhost"
           PORT: "5432"
         run: |
