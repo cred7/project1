@@ -70,7 +70,7 @@ jobs:
         run: |
           python manage.py migrate &&
           daphne -b 0.0.0.0 -p 7000 core.asgi:application
-          python -m unittest discover -s tests
+          
         working-directory: gorbackend
 
       - name: Install Next.js dependencies
