@@ -47,7 +47,7 @@ jobs:
       - name: set up nextjs
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "24.11.0"
       #  waiting for services to be ready
       - name: Wait for Postgres to be ready
         run: |
